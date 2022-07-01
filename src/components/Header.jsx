@@ -11,7 +11,7 @@ export default function Header() {
   const { pathname } = useLocation();
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, mb: 4 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton

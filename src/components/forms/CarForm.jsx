@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
+import CircularProgress from "@mui/material/CircularProgress";
+import FormControl from "@mui/material/FormControl";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TextField, Button } from "@mui/material";
+
+import { useHydration } from "../../hooks/useHydration";
 
 const schema = yup.object().shape({
   name: yup.string().max(30).required(),
@@ -10,18 +14,21 @@ const schema = yup.object().shape({
   avatar_url: yup.string(),
 });
 
-const defaultValues = {
+const defaults = {
   name: "",
   bhp: "",
   avatar_url: "",
 };
 
-export default function CarForm({
-  car,
-  submitHandler,
-  defaultValue = defaultValues,
-}) {
-  console.log({car});
+export default function CarForm({ car, submitHandler }) {
+  console.log({ car });
+
+  const hydrated = useHydration();
+  console.log(
+    "🚀 ~ file: CarForm.jsx ~ line 26 ~ CarForm ~ hydrated",
+    hydrated
+  );
+
   const {
     handleSubmit,
     formState: { errors, isValid, isDirty, isSubmitting },
@@ -30,8 +37,15 @@ export default function CarForm({
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: car || defaultValue,
+    defaultValues: car || defaults,
   });
+
+  useEffect(() => {
+    // console.log('useeffect', car);
+    reset(car);
+  }, [car, reset]);
+
+  if (!hydrated) return <CircularProgress />;
 
   const formRowStyle = {
     marginBlockEnd: "1em",
@@ -53,6 +67,7 @@ export default function CarForm({
           render={({ field }) => (
             <TextField
               type="name"
+              fullWidth
               error={!!errors.name}
               {...field}
               label="name"
@@ -70,6 +85,7 @@ export default function CarForm({
           render={({ field }) => (
             <TextField
               type="number"
+              fullWidth
               error={!!errors.bhp}
               {...field}
               label="bhp"
@@ -87,6 +103,7 @@ export default function CarForm({
           defaultValue={""}
           render={({ field }) => (
             <TextField
+              fullWidth
               type="text"
               error={!!errors.avatar_url}
               {...field}
@@ -100,7 +117,7 @@ export default function CarForm({
       <div style={{ marginTop: 20 }}>
         <Button
           type="reset"
-          onClick={reset}
+          onClick={() => reset()}
           variant="contained"
           sx={{ mr: 2 }}
           disabled={!isDirty}

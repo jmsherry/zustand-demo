@@ -19,6 +19,7 @@ function UpdateCar() {
     updateCar(id, data);
     navigate("/");
   };
+  
   return (
     <>
       <h1>UpdateCar</h1>

@@ -1,6 +1,6 @@
 import React from "react";
-import shallow from 'zustand/shallow'
-import { NavLink} from "react-router-dom";
+import shallow from "zustand/shallow";
+import { NavLink } from "react-router-dom";
 import useStore, { selectCars, removeCar } from "../store/store";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -11,10 +11,19 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from "@mui/material/CircularProgress";
+
+import {useHydration} from "../hooks/useHydration";
 
 function CarsList() {
   const cars = useStore(selectCars, shallow);
   const remove = useStore(removeCar);
+
+  const hydrated = useHydration();
+  console.log("🚀 ~ file: List.jsx ~ line 22 ~ CarsList ~ hydrated", hydrated);
+
+  if (!hydrated) return <CircularProgress />;
+
   return (
     <Box>
       <List>
