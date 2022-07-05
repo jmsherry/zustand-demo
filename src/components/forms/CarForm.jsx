@@ -65,7 +65,7 @@ export default function CarForm({ car, submitHandler }) {
           defaultValue={""}
           render={({ field }) => (
             <TextField
-              type="name"
+              type="text"
               fullWidth
               error={!!errors.name}
               {...field}
